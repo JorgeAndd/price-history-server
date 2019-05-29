@@ -21,14 +21,9 @@ namespace PriceHistoryServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<PriceHistoryContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddCors();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddCors(o => o.AddPolicy("policy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,8 +39,8 @@ namespace PriceHistoryServer
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader());
             app.UseMvc();
-            app.UseCors("Policy");
         }
     }
 }

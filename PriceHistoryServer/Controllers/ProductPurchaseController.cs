@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PriceHistoryServer.Models;
+using PriceHistoryServer.Models.Enums;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,13 +42,14 @@ namespace PriceHistoryServer.Controllers
 
             var productsAveragePrice = new Dictionary<Product, decimal>();
 
-            var averages = productsPrices.Select(p => new ProductAveragePrice
+            var prices = productsPrices.Select(p => new ProductAveragePrice
             {
-                Product = p.Key,
+                ProductName = p.Key.Name,
+                Unit = p.Key.Measurement.ToString(),
                 AveragePrice = p.Value.Average()
             });
 
-            return Ok(averages);
+            return Ok(prices);
         }
 
         // GET api/<controller>/5
